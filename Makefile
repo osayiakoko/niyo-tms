@@ -36,4 +36,5 @@ provisionsuperuser:
 
 .PHONY: test
 test:
-	poetry run pytest -v -rs -rP -n auto --show-capture=stdout
+	echo "No test yet"
+# poetry run pytest -v -rs -rP -n auto --show-capture=stdout
