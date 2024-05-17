@@ -15,7 +15,7 @@ def test_partial_update_task_by_admin(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, assigned_to=user)
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = {"title": "Updated Title"}
     res = api_client_jwt_admin.patch(url, update_data)
 
@@ -35,7 +35,7 @@ def test_partial_update_task_by_another_admin_fails(
         "task.Task", created_by=another_admin_user, assigned_to=user
     )
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = {"title": "Updated Title"}
     res = api_client_jwt_admin.patch(url, update_data)
 
@@ -52,7 +52,7 @@ def test_partial_update_task_status_by_assigned_user(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, assigned_to=user)
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = {"status": "done"}
     res = api_client_jwt.patch(url, update_data)
 
@@ -69,7 +69,7 @@ def test_partial_update_task_title_by_assigned_user_fails(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, assigned_to=user)
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = {"title": "Updated Title"}
     res = api_client_jwt.patch(url, update_data)
 
