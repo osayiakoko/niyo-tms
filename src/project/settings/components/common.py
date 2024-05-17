@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+# pylint: disable=E0602,C0114
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("DJANGO_SECRET_KEY")  # noqa: F821 # type: ignore
 
