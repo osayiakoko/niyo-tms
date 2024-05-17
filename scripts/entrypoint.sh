@@ -11,7 +11,7 @@ echo 'Running migrations...'
 $RUN_MANAGE_PY migrate --no-input
 
 # echo 'Provisioning superuser...'
-# $RUN_MANAGE_PY provisionsuperuser
+$RUN_MANAGE_PY provisionsuperuser
 
 cd src
 exec poetry run gunicorn \
