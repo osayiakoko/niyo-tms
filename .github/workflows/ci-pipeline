@@ -1,0 +1,75 @@
+name: CI pipeline
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.head_ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Quality Assurance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:14.2-alpine
+        env:
+          POSTGRES_DB: niyotms
+          POSTGRES_USER: niyotms
+          POSTGRES_PASSWORD: niyotms
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.7.1
+
+      - name: Install Dependencies
+        run: make install
+
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          FILTER_REGEX_EXCLUDE: .*/migrations/.*
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: "dev"
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+          VALIDATE_MARKDOWN: true
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_TERRAFORM_TFLINT: true
+          VALIDATE_YAML: true
+
+      - name: Run Tests
+        run: make test
+        env:
+          DJANGO_ENV: development
+          POSTGRES_DB: niyotms
+          POSTGRES_USER: niyotms
+          POSTGRES_PASSWORD: niyotms
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          DJANGO_SECRET_KEY: secret_key_:)
+          DJANGO_SUPERUSER_EMAIL: superuser@gmail.com
+          DJANGO_SUPERUSER_PASSWORD: superPassword
