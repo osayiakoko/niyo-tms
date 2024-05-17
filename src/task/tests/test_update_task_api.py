@@ -37,7 +37,7 @@ def test_update_task_by_admin(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, **_task_data(user))
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = _updated_task_data(task.assigned_to)
 
     update_res = api_client_jwt_admin.put(url, update_data)
@@ -62,7 +62,7 @@ def test_update_task_by_another_admin_fails(
         "task.Task", created_by=another_admin_user, **_task_data(user)
     )
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = _updated_task_data(task.assigned_to)
     res = api_client_jwt_admin.put(url, update_data)
 
@@ -76,7 +76,7 @@ def test_update_task_by_user_fails(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, **_task_data(user))
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     update_data = _updated_task_data(task.assigned_to)
     res = api_client_jwt.put(url, update_data)
 

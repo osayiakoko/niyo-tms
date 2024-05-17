@@ -14,7 +14,7 @@ def test_delete_task_by_admin(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, assigned_to=user)
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     res = api_client_jwt_admin.delete(url)
 
     assert res.status_code == status.HTTP_204_NO_CONTENT
@@ -34,7 +34,7 @@ def test_delete_task_by_another_admin_fails(
         "task.Task", created_by=another_admin_user, assigned_to=user
     )
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     res = api_client_jwt_admin.delete(url)
 
     assert res.status_code == status.HTTP_403_FORBIDDEN
@@ -50,7 +50,7 @@ def test_delete_task_by_user_fails(
     # Create a task created by the admin user
     task: Task = baker.make("task.Task", created_by=user_admin, assigned_to=user)
 
-    url = f"/v1/tasks/{task.id}/"
+    url = f"/v1/tasks/{task.id}"
     res = api_client_jwt.delete(url)
 
     assert res.status_code == status.HTTP_403_FORBIDDEN
