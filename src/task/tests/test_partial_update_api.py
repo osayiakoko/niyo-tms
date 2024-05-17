@@ -59,7 +59,7 @@ def test_partial_update_task_status_by_assigned_user(
     assert res.status_code == status.HTTP_200_OK
     # Verify that the task status changed
     task.refresh_from_db()
-    assert task.status == TaskStatus.DONE.value
+    assert task.status == TaskStatus.DONE
 
 
 @pytest.mark.django_db
