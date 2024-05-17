@@ -9,7 +9,7 @@ class TaskAdmin(admin.ModelAdmin):
         "title",
         "created_by",
         "assigned_to",
-        "due_date",
+        "due_at",
         "priority",
         "status",
     )
@@ -17,7 +17,7 @@ class TaskAdmin(admin.ModelAdmin):
         "created_by",
         "assigned_to",
         "created_at",
-        "due_date",
+        "due_at",
         "priority",
         "status",
     )
