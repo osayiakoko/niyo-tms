@@ -29,3 +29,10 @@ model-bakery = "^1.18.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "project.settings"
+django_find_project = false
+python_files = ["**/test*.py", ]
+pythonpath = "./src"
