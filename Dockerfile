@@ -12,7 +12,7 @@ ENV PYTHONPATH .
 RUN set -xe \
     && apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
-    && pip install virtualenvwrapper poetry==1.7.0 gunicorn \
+    && pip install virtualenvwrapper poetry==1.7.1 gunicorn uvicorn[standard] \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,7 +26,7 @@ COPY ["Makefile", "./"]
 COPY src src
 
 # Expose the Django development server port (adjust if needed)
-EXPOSE 8000 80 443
+EXPOSE 8000
 
 # Set up the entrypoint
 COPY scripts/entrypoint.sh /entrypoint.sh
