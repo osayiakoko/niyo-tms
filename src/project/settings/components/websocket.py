@@ -1,3 +1,5 @@
+# pylint: disable=E0602,C0114
+
 ASGI_APPLICATION = "project.asgi.application"
 
 REDIS_HOST = env("REDIS_HOST")  # noqa: F821 # type: ignore
