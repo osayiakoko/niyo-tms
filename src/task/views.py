@@ -3,9 +3,11 @@ from rest_framework import viewsets, status
 
 from core.exceptions import APIException
 
+from .enums import TaskWebSocketEvent
 from .models import Task
 from .permissions import TaskPermission
 from .serializers import TaskSerializer
+from .utils import notify_task_listeners
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -16,6 +18,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Attach the 'created_by' field to the user making the request
         serializer.save(created_by=self.request.user)
+        notify_task_listeners(TaskWebSocketEvent.CREATE, serializer.data)
 
     def perform_update(self, serializer):
         # Check if it's a partial update (PATCH request) by assigned user
@@ -29,3 +32,9 @@ class TaskViewSet(viewsets.ModelViewSet):
                 )
 
         serializer.save()
+        notify_task_listeners(TaskWebSocketEvent.UPDATE, serializer.data)
+
+    def perform_destroy(self, instance):
+        task_id = instance.id
+        instance.delete()
+        notify_task_listeners(TaskWebSocketEvent.DELETE, {"id": task_id})

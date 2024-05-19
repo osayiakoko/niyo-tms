@@ -27,6 +27,7 @@ The Task Management API is a RESTful API built using Django REST Framework (DRF)
 - Django channels
 - Pytest
 - PostgreSQL
+- Redis
 
 
 ## Getting Started
@@ -40,6 +41,7 @@ Before running the project, ensure you have the following prerequisites installe
   - [**Python 3.11**](https://www.python.org/downloads/release/python-3118/)
   - [**Poetry 1.7**](https://python-poetry.org/docs/#installation): Python package manager
   - [**PostgreSQL**](https://www.postgresql.org/download/): Database.
+  - [**Redis**](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/): Django Channels websocket layer.
   - [**Makefile**](https://sp21.datastructur.es/materials/guides/make-install.html): Compile/Build automation  tool.
     ```bash
     # MacOS
@@ -77,7 +79,9 @@ Access API via [locahost](http:localhost:8000/)
     ```
 3. **Database Setup**<br>
     Ensure PostgreSQL is running and a database is created with the details specified in the .env file.
-3. **Running Commands**<br>
+4. **Redis Setup**<br>
+    Ensure Redis is running with the HOST & PORT details specified in the .env file.
+5. **Running Commands**<br>
 You can run various commands using the Makefile provided in the project:
     ```bash
     # Install dependencies
@@ -124,7 +128,11 @@ The following endpoints are available in the Task Management API:
 - `PATCH /v1/tasks/{id}/`: Partially update details of a specific task.
 - `DELETE /v1/tasks/{id}/`: Delete a specific task.
 
-### Miscellaneous Endpoints
+### WebSocket Endpoint
+
+- `ws /ws/v1/tasks/`: Establish connection to tasks websocket
+
+### Miscellaneous Endpoint
 
 - `GET /health-check`: Check the health status of the API service.
 
@@ -171,12 +179,64 @@ NOTE: if running on local machine, you have to create a superuser first from the
 Input validation is implemented using Django REST Framework's serializers and validation classes. Incoming request data is validated to ensure it meets the specified criteria and to prevent any security vulnerabilities such as SQL injection or cross-site scripting (XSS) attacks.
 anagement API is implemented using JSON Web Tokens (JWT). To access protected endpoints, clients must include a valid JWT token in the Authorization header of their HTTP requests.
 
-### Real-time Data Streaming
-Implement WebSocket functionality using Django Channels or libraries such as Socket.IO for real-time data streaming. This enables clients to seamlessly receive updates as tasks are created, modified, or removed in real-time.
+### Real-time Task Updates via WebSocket
+Implement WebSocket functionality using Django Channels for real-time data streaming. This enables clients to seamlessly receive updates as tasks are created, modified, or removed in real-time.
+
+#### **Connection URL**
+
+The WebSocket connection URL is `/ws/v1/tasks/`.
+
+#### **Message Structure**
+
+Messages sent over the WebSocket contain information about task events such as creation, update, and deletion.
+
+```json
+// Task  Creation
+{
+    "event": "create",
+    "payload": {
+        "id": 1,
+        "title": "Deliver NIYO project",
+        "description": "Recruitment process requirement",
+        "priority": "high",
+        "status": "todo",
+        "created_at": "2024-05-19T15:52:43.389788Z",
+        "updated_at": "2024-05-19T17:20:43.908888Z",
+        "due_at": "2024-05-20T12:00:00Z",
+        "created_by": 1,
+        "assigned_to": 2
+    }
+}
+
+// Task Update
+{
+    "event": "update",
+    "payload": {
+        "id": 1,
+        "title": "Deliver NIYO project",
+        "description": "Recruitment process requirement",
+        "priority": "high",
+        "status": "done", // updated
+        "created_at": "2024-05-19T15:52:43.389788Z",
+        "updated_at": "2024-05-19T17:30:17.908888Z",  // updated
+        "due_at": "2024-05-20T12:00:00Z",
+        "created_by": 1,
+        "assigned_to": 2
+    }
+}
+
+// Task Deletion
+{
+    "event": "delete",
+    "payload": {
+        "id": 1
+    }
+}
+```
 
 ### Integration Tests
 
-API integration tests are included in the project to ensure the correctness and reliability of the API endpoints. Tests cover scenarios such as creating tasks, retrieving tasks, updating tasks, deleting tasks, and handling authentication.
+API integration tests are included in the project to ensure the correctness and reliability of the API endpoints. Tests cover scenarios such as creating tasks, retrieving tasks, updating tasks, deleting tasks, handling authentication, and ensuring Task websocket consumer works as expected.
 ```bash
 # command to run test on local machine
 make test
