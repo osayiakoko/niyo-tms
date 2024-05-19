@@ -31,6 +31,16 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis:7.2.4-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -73,3 +83,5 @@ jobs:
           DJANGO_SECRET_KEY: secret_key_:)
           DJANGO_SUPERUSER_EMAIL: superuser@gmail.com
           DJANGO_SUPERUSER_PASSWORD: superPassword
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
