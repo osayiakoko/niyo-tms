@@ -15,7 +15,7 @@ $RUN_MANAGE_PY provisionsuperuser
 
 cd src
 exec poetry run gunicorn \
-    --workers $((2 * $(getconf _NPROCESSORS_ONLN) + 1)) \
-    --threads 4 \
-    --bind 0.0.0.0:8000 \
-    project.wsgi:application
+    -k uvicorn.workers.UvicornWorker \
+    -w $((2 * $(getconf _NPROCESSORS_ONLN) + 1)) \
+    -b 0.0.0.0:8000 \
+    project.asgi:application
