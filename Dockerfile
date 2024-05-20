@@ -12,7 +12,7 @@ ENV PYTHONPATH .
 RUN set -xe \
     && apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
-    && pip install virtualenvwrapper poetry==1.7.1 gunicorn uvicorn[standard] \
+    && pip install virtualenvwrapper poetry==1.7.1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

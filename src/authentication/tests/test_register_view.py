@@ -9,7 +9,7 @@ def test_register_view(api_client: APIClient):
     first_name = "John"
     last_name = "Doe"
     email = "johndoe@gmail.com"
-    password = "pass1234"
+    password = "Pass1234"
 
     data = {
         "first_name": first_name,

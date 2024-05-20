@@ -20,6 +20,20 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=128, write_only=True)
     token = JwtTokenSerializer(read_only=True)
 
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise APIException(detail="Password must be at least 8 characters long.")
+
+        if not any(char.isupper() for char in value):
+            raise APIException(
+                detail="Password must contain at least one uppercase letter."
+            )
+
+        if not any(char.isdigit() for char in value):
+            raise APIException(detail="Password must contain at least one number.")
+
+        return value
+
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         update_last_login(None, user)
