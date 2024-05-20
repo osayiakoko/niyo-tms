@@ -4,6 +4,17 @@ The Task Management API is a RESTful API built using Django REST Framework (DRF)
 
 [![Dev tests](https://github.com/osayiakoko/niyo-tms/actions/workflows/ci-pipeline.yml/badge.svg?branch=dev)](https://github.com/osayiakoko/niyo-tms/actions/workflows/ci-pipeline.yml)
 
+
+## Live Demo
+
+Check out the live demo of the project [here](https://d3e8nbppp9b8ms.cloudfront.net).
+
+To access the [admin dashboard](https://d3e8nbppp9b8ms.cloudfront.net/admin), use the following login details:
+
+- **Email:** admin@example.com
+- **Password:** password
+
+
 ## Table of Contents
 
 - [Project Name](#niyo-task-management-system-api)
@@ -60,7 +71,7 @@ docker compose -f docker-compose.yml up  --build
 ```
 
 This command will start the containers for PostgreSQL and other services specified in the docker-compose file. <br>
-Access API via [locahost](http:localhost:8000/)
+Access API via [locahost:8000](http:localhost:8000/)
 
 ### Running on Local machine
 
